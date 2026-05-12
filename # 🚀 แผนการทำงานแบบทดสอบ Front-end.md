@@ -18,7 +18,7 @@
 - [✔️] **Global State Management (บ่าย):**
     - สร้าง Zustand Store สำหรับจัดการ Task (อ่าน, เพิ่ม, อัปเดต)
     - สร้าง State สำหรับจัดการ Dark / Light Mode
-- [ ] **Layout พื้นฐาน (เย็น):**
+- [✔️] **Layout พื้นฐาน (เย็น):**
     - สร้างโครงร่าง Sidebar (ทำให้เลื่อนซ่อน/ขยายได้) และ Main Content
     - ทำระบบ Dark / Light Mode ให้ใช้งานได้จริง (เปลี่ยนสีพื้นหลัง/ตัวหนังสือ)
 
@@ -27,7 +27,7 @@
 ## 🗓️ วันที่ 2: สร้างหน้า Dashboard และระบบค้นหา (Core Features)
 *เป้าหมาย: ปั้น UI ตามเรฟเฟอเรนซ์ และทำให้ระบบทำงานโต้ตอบได้*
 
-- [ ] **Task Card & Board (เช้า):**
+- [✔️] **Task Card & Board (เช้า):**
     - สร้าง Component `TaskCard` ตามโจทย์ (ชื่อ, Tag, วันที่, Status, Progress, รูป Avatar)
     - จัด Layout นำ Card มาเรียงในคอลัมน์ To Do, In Progress, Done
 - [ ] **ระบบ Search & Filter (บ่าย):**

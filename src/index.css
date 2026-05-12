@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  
+  /* สีหลัก (Primary & Layout) */
+  --color-brand-navy: #151a2a;      /* สี Sidebar */
+  --color-brand-blue: #2563eb;      /* สีปุ่ม New Task และ Active เมนู */
+  --color-brand-blue-hover: #1d4ed8;
+  
+  /* สีเทา (Backgrounds & Text) */
+  --color-brand-grey-bg: #f3f4f6;   /* พื้นหลังของ Board พื้นที่ทำงาน */
+  --color-brand-grey-border: #e5e7eb;
+  --color-brand-grey-text: #6b7280; /* สีตัวหนังสือรอง (เช่น วันที่, Muted text) */
+  
+  /* สีสถานะ (Status & Priorities) */
+  --color-brand-green: #10b981;     /* Status: Done / กราฟเส้นเขียว */
+  --color-brand-green-light: #d1fae5; /* พื้นหลัง Tag Done */
+  
+  --color-brand-red: #ef4444;       /* Status: High Priority */
+  --color-brand-red-light: #fee2e2;   /* พื้นหลัง Tag High Priority */
+  
+  --color-brand-yellow: #f59e0b;    /* Status: Medium / กราฟเส้นเหลือง */
+  --color-brand-yellow-light: #fef3c7;/* พื้นหลัง Tag Medium Priority */
+  
+  --color-brand-purple: #8b5cf6;    /* สีเสริมเผื่อใช้กับไอคอน */
+}
+
+@layer base {
+  body {
+    @apply bg-brand-grey-bg text-gray-900 transition-colors duration-300;
+  }
+
+  .dark body {
+    @apply bg-black text-white;
+  }
+}

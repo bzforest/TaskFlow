@@ -2,6 +2,24 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
+
+  --color-status-green-bg: var(--bg-green);
+  --color-status-green-text: var(--text-green);
+  
+  --color-status-blue-bg: var(--bg-blue);
+  --color-status-blue-text: var(--text-blue);
+  
+  --color-status-yellow-bg: var(--bg-yellow);
+  --color-status-yellow-text: var(--text-yellow);
+  
+  --color-status-red-bg: var(--bg-red);
+  --color-status-red-text: var(--text-red);
+  
+  --color-status-gray-bg: var(--bg-gray);
+  --color-status-gray-text: var(--text-gray);
+
+  --color-tooltip-bg: var(--tooltip-bg-color);
+  --color-tooltip-arrow: var(--tooltip-arrow-color);
   
   /* สีหลัก (Primary & Layout) */
   --color-brand-navy: #151a2a;      /* สี Sidebar */
@@ -27,8 +45,50 @@
 }
 
 @layer base {
+  :root {
+    /* 🌞 ค่าสีสำหรับโหมดสว่าง (Light Mode) */
+    --bg-green: #d1fae5; 
+    --text-green: #166534; 
+    
+    --bg-blue: #dbeafe; 
+    --text-blue: #1e40af; 
+    
+    --bg-yellow: #fef08a; 
+    --text-yellow: #854d0e; 
+    
+    --bg-red: #fee2e2; 
+    --text-red: #991b1b; 
+    
+    --bg-gray: #f3f4f6; 
+    --text-gray: #4b5563;
+
+    --tooltip-bg-color: #151a2a;
+    --tooltip-arrow-color: #151a2a;
+  }
+
+  .dark {
+    /* 🌙 ค่าสีสำหรับโหมดมืด (Dark Mode) - พื้นหลังจะโปร่งแสง ตัวอักษรจะสว่างขึ้น */
+    --bg-green: rgba(20, 83, 45, 0.4); 
+    --text-green: #4ade80; 
+    
+    --bg-blue: rgba(30, 58, 138, 0.4); 
+    --text-blue: #60a5fa; 
+    
+    --bg-yellow: rgba(113, 63, 18, 0.4); 
+    --text-yellow: #facc15; 
+    
+    --bg-red: rgba(127, 29, 29, 0.4); 
+    --text-red: #f87171; 
+    
+    --bg-gray: rgba(55, 65, 81, 0.6); 
+    --text-gray: #d1d5db; 
+
+    --tooltip-bg-color: #1f2937;
+    --tooltip-arrow-color: #1f2937;
+  }
+  
   body {
-    @apply bg-brand-grey-bg text-gray-900 transition-colors duration-300;
+    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
   }
 
   .dark body {

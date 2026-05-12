@@ -65,7 +65,7 @@ export default function Sidebar ({ isOpen , setIsOpen }: SidebarProps) {
                         { !item.active && hoveredMenu === item.name && (
                             <motion.div 
                                 layoutId="hover-bg"
-                                className='absolute inset-0 bg-gray-800 rounded-lg'
+                                className='absolute inset-0 bg-white/10 rounded-lg'
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0}}
@@ -95,7 +95,7 @@ export default function Sidebar ({ isOpen , setIsOpen }: SidebarProps) {
             {/* ปุ่มพับ/ขยาย Sidebar */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="absolute -right-3 top-10 bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-1 rounded-full border border-gray-200 dark:border-gray-600 shadow-md hover:scale-110 transition-transform z-30 cursor-pointer"
+                className="absolute -right-3 top-10 bg-status-gray-bg text-status-gray-text p-1 rounded-full shadow-md hover:scale-110 transition-transform z-30 cursor-pointer"
             >
                 {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
             </button>

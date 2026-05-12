@@ -9,13 +9,13 @@
 ## 🗓️ วันที่ 1: โครงสร้างพื้นฐาน และ Mock Data (Foundation & Data)
 *เป้าหมาย: ตั้งไข่โปรเจคให้แข็งแรง วางระบบ State ให้พร้อม*
 
-- [ ] **Project Setup (เช้า):**
+- [✔️] **Project Setup (เช้า):**
     - สร้างโปรเจคด้วย React + Vite
     - ติดตั้ง Tailwind CSS และ Libraries ทั้งหมดที่ต้องใช้งาน
-- [ ] **Mock Data (สายๆ):**
+- [✔️] **Mock Data (สายๆ):**
     - สร้างไฟล์ `src/data/mockTasks.ts` จำลองข้อมูล Task (ประมาณ 15-20 รายการ)
     - กำหนดให้มีสถานะ (To Do, In Progress, Done) และ Priority ที่หลากหลาย
-- [ ] **Global State Management (บ่าย):**
+- [✔️] **Global State Management (บ่าย):**
     - สร้าง Zustand Store สำหรับจัดการ Task (อ่าน, เพิ่ม, อัปเดต)
     - สร้าง State สำหรับจัดการ Dark / Light Mode
 - [ ] **Layout พื้นฐาน (เย็น):**

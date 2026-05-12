@@ -9,7 +9,7 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <header className="h-20 bg-white dark:bg-gray-800 border-b border-brand-grey-border dark:border-gray-700 flex items-center justify-between px-6 transition-colors duration-300 z-10">
+    <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-10">
       
       {/* ด้านซ้าย */}
       <div className="flex items-center">
@@ -21,18 +21,18 @@ export default function Navbar() {
         
         {/* ช่อง Search หลัก */}
         <div className="relative hidden md:block group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-blue transition-colors" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-status-gray-text group-focus-within:text-brand-blue transition-colors" size={18} />
           <input
             type="text"
             placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-64 pl-10 pr-4 py-2 bg-brand-grey-bg dark:bg-gray-700 dark:text-white border border-transparent focus:border-brand-blue focus:bg-white dark:focus:bg-gray-600 rounded-lg outline-none transition-all duration-300"
+            className="w-64 pl-10 pr-4 py-2 bg-status-gray-bg text-status-gray-text border border-transparent focus:border-brand-blue focus:bg-transparent rounded-lg outline-none transition-all duration-300"
           />
         </div>
 
         {/* ปุ่มแจ้งเตือน */}
-        <button className="relative text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-transform hover:scale-110 cursor-pointer">
+        <button className="relative text-status-gray-text hover:text-brand-blue transition-transform hover:scale-110 cursor-pointer">
           <Bell size={20} />
           <span className="absolute -top-1 -right-1 flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
@@ -43,7 +43,7 @@ export default function Navbar() {
         {/* ปุ่มสลับ Dark/Light Mode */}
         <button 
           onClick={toggleDarkMode}
-          className="relative flex items-center justify-center w-10 h-10 text-gray-500 hover:text-brand-blue dark:text-gray-400 dark:hover:text-brand-yellow transition-colors overflow-hidden cursor-pointer"
+          className="relative flex items-center justify-center w-10 h-10 text-status-gray-text hover:text-brand-blue transition-colors overflow-hidden cursor-pointer"
         >
           <AnimatePresence mode="wait" initial={false}>
             {isDarkMode ? (
@@ -80,18 +80,18 @@ export default function Navbar() {
           <img 
             src="https://i.pravatar.cc/150?img=11" 
             alt="User Avatar" 
-            className="w-9 h-9 rounded-full border-2 border-brand-grey-border dark:border-gray-600 group-hover:border-brand-blue transition-colors"
+            className="w-9 h-9 rounded-full border-2 border-brand-grey-border dark:border-transparent group-hover:border-brand-blue transition-colors"
           />
           <div className="hidden md:flex items-center space-x-2">
             <div className="flex flex-col">
               <span className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">Best Sakditat</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">Admin</span>
+              <span className="text-xs text-status-gray-text">Admin</span>
             </div>
             
             <ChevronDown 
               size={16} 
               className={clsx(
-                "text-gray-500 transition-transform duration-300",
+                "text-status-gray-text transition-transform duration-300",
                 isDropdownOpen ? "rotate-180" : "rotate-0"
               )} 
             />

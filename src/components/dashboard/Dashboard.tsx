@@ -1,6 +1,7 @@
 import { useTaskStore } from '../../store/useTaskStore';
 import TaskCard from './TaskCard';
 import FilterBar from './FilterBar';
+import TaskModal from './TaskModal';
 import type { TaskStatus } from '../../types';
 
 export default function Dashboard() {
@@ -27,6 +28,7 @@ export default function Dashboard() {
     <div className="h-full flex flex-col">
 
       <FilterBar />
+      <TaskModal />
       
       {/* Board Container */}
       <div className="flex-1 overflow-x-auto mt-2 scrollbar-hide">

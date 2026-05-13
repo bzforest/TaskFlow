@@ -10,6 +10,7 @@ interface TaskStore {
     filterPriority: TaskPriority | 'All';
     filterStatus: TaskStatus | 'All';
     isDarkMode: boolean;
+    isModalOpen: boolean;
 
     // ACtion (การจัดการข้อมูล)
     addTask: (task: Task) => void;
@@ -18,6 +19,8 @@ interface TaskStore {
     setFilterPriority: (priority: TaskPriority | 'All') => void;
     setFilterStatus: (status: TaskStatus | 'All') => void;
     toggleDarkMode: () => void;
+    openModal: () => void;
+    closeModal: () => void;
 }
 
 export const useTaskStore = create<TaskStore>((set) => ({
@@ -28,6 +31,7 @@ export const useTaskStore = create<TaskStore>((set) => ({
 
     // เช็คว่าผู้ใช้งานเปิด darkMode ไว้ในเครื่องมั้ย ถ้ามีจะใช้ตามเครื่อง
     isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    isModalOpen: false,
 
     addTask: (task) =>
         set((state) => ({ tasks: [...state.tasks, task] })),
@@ -53,4 +57,7 @@ export const useTaskStore = create<TaskStore>((set) => ({
             }
             return { isDarkMode: newDarkMode };
         }),
+
+    openModal: () => set({ isModalOpen: true }),
+    closeModal: () => set({ isModalOpen: false }),
 }));

@@ -46,7 +46,7 @@
 
 @layer base {
   :root {
-    /* 🌞 ค่าสีสำหรับโหมดสว่าง (Light Mode) */
+    /* ค่าสีสำหรับโหมดสว่าง (Light Mode) */
     --bg-green: #d1fae5; 
     --text-green: #166534; 
     
@@ -67,7 +67,7 @@
   }
 
   .dark {
-    /* 🌙 ค่าสีสำหรับโหมดมืด (Dark Mode) - พื้นหลังจะโปร่งแสง ตัวอักษรจะสว่างขึ้น */
+    /*  ค่าสีสำหรับโหมดมืด (Dark Mode) */
     --bg-green: rgba(20, 83, 45, 0.4); 
     --text-green: #4ade80; 
     
@@ -93,5 +93,16 @@
 
   .dark body {
     @apply bg-brand-navy text-white;
+  }
+}
+
+/* --- ซ่อน Scrollbar แต่ยัง Scroll ได้ --- */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* สำหรับ IE และ Edge */
+    scrollbar-width: none; /* สำหรับ Firefox */
   }
 }

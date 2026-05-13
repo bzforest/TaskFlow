@@ -40,7 +40,6 @@ export const useTaskStore = create<TaskStore>((set) => ({
         })),
 
     setSearchQuery: (query) => set({ searchQuery: query}),
-
     setFilterPriority: (priority) => set({ filterPriority: priority }),
     setFilterStatus: (status) => set ({ filterStatus: status }),
 

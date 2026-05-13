@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import type { Task, TaskPriority, TaskStatus } from '../types';
 import { initialTasks } from '../data/mockTasks';
 
+export type TabType = 'dashboard' | 'my-tasks' | 'team' | 'settings';
+
 // State & Actions
 interface TaskStore {
     // State (ข้อมูล)
@@ -13,6 +15,7 @@ interface TaskStore {
     isModalOpen: boolean;
     selectedTask: Task | null;
     isDetailModalOpen: boolean;
+    activeTab: TabType;
 
     // ACtion (การจัดการข้อมูล)
     addTask: (task: Task) => void;
@@ -27,6 +30,7 @@ interface TaskStore {
     closeModal: () => void;
     openDetailModal: (task: Task) => void;
     closeDetailModal: () => void;
+    setActiveTab: (tab: TabType) => void;
 
     currentUser: {
         id: string;
@@ -36,6 +40,11 @@ interface TaskStore {
 }
 
 export const useTaskStore = create<TaskStore>((set) => ({
+
+    // dashboard หน้าเริ่มต้น
+    activeTab: 'dashboard',
+    setActiveTab: (tab) => set({ activeTab: tab }),
+
     tasks: initialTasks,
     searchQuery: '',
     filterPriority: 'All',

@@ -3,13 +3,16 @@ import type { Task } from '../../types';
 import clsx from 'clsx';
 import AnimatedProgress from './AnimatedProgress';
 import AnimatedAvatarGroup from './AnimatedAvatarGroup';
+import { useTaskStore } from '../../store/useTaskStore';
 
 interface TaskCardProps {
   task: Task;
   onClick?: () => void;
 }
 
-export default function TaskCard({ task, onClick }: TaskCardProps) {
+export default function TaskCard({ task }: TaskCardProps) {
+
+    const { openDetailModal } = useTaskStore();
 
     const priorityColors = {
         'Low': 'bg-status-green-bg text-status-green-text',
@@ -23,9 +26,23 @@ export default function TaskCard({ task, onClick }: TaskCardProps) {
         'Done': 'bg-status-green-bg text-status-green-text',
     };
 
+    const handleDragStart = (e: React.DragEvent) => {
+      e.dataTransfer.setData('taskId' , task.id);
+      setTimeout(() => {
+        (e.target as HTMLElement).classList.add('opacity-50');
+      }, 0)
+    };
+
+    const handleDragEnd = (e: React.DragEvent) => {
+      (e.target as HTMLElement).classList.remove('opacity-50');
+    };
+
   return (
     <div 
-      onClick={onClick}
+      onClick={() => openDetailModal(task)}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       className="bg-white dark:bg-brand-navy border border-brand-grey-border dark:border-transparent rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col gap-3 group hover:border-brand-blue dark:hover:border-brand-blue"
     >
       {/* Title & Project Name */}

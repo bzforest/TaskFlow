@@ -30,14 +30,14 @@
 - [✔️] **Task Card & Board (เช้า):**
     - สร้าง Component `TaskCard` ตามโจทย์ (ชื่อ, Tag, วันที่, Status, Progress, รูป Avatar)
     - จัด Layout นำ Card มาเรียงในคอลัมน์ To Do, In Progress, Done
-- [ ] **ระบบ Search & Filter (บ่าย):**
+- [✔️] **ระบบ Search & Filter (บ่าย):**
     - ทำช่อง Search พร้อมระบบ **Debounce** (หน่วงเวลาพิมพ์)
     - ทำ Dropdown สำหรับ Filter (ตาม Priority และ Status)
     - ผูกระบบ Search/Filter เข้ากับ State ของ Board เพื่ออัปเดตข้อมูลแบบ Real-time
-- [ ] **Popup (Modal) ดูรายละเอียดและแก้ไข (เย็น):**
+- [✔️] **Popup (Modal) ดูรายละเอียดและแก้ไข (เย็น):**
     - คลิกที่ Card -> แสดง Modal ข้อมูลของการ์ดนั้นๆ
     - ทำฟอร์มรองรับการสร้าง New Task และการกดอัปเดต Task เดิม
-- [ ] **Pagination (ค่ำ):**
+- [✔️] **Pagination (ค่ำ):**
     - ทำระบบแบ่งหน้า (เช่น หน้าละ 6-9 Task) และแสดงผลการ์ดที่เหลือเมื่อเปลี่ยนหน้า
 
 ---

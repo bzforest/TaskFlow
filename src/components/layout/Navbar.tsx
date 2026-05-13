@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Bell, Sun, Moon, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTaskStore } from '../../store/useTaskStore';
@@ -7,6 +7,15 @@ import clsx from 'clsx';
 export default function Navbar() {
   const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery } = useTaskStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [localSearch , setLocalSearch] = useState(searchQuery);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(localSearch);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localSearch , setSearchQuery])
 
   return (
     <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-10">
@@ -25,8 +34,8 @@ export default function Navbar() {
           <input
             type="text"
             placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
             className="w-64 pl-10 pr-4 py-2 bg-status-gray-bg text-status-gray-text border border-transparent focus:border-brand-blue focus:bg-transparent rounded-lg outline-none transition-all duration-300"
           />
         </div>

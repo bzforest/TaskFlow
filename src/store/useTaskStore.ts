@@ -18,6 +18,7 @@ interface TaskStore {
     addTask: (task: Task) => void;
     updateTask: (updateTask: Task) => void;
     deleteTask: (taskId: string) => void;
+    moveTask: (taskId: string, newStatus: TaskStatus) => void;
     setSearchQuery: (query: string) => void;
     setFilterPriority: (priority: TaskPriority | 'All') => void;
     setFilterStatus: (status: TaskStatus | 'All') => void;
@@ -66,6 +67,17 @@ export const useTaskStore = create<TaskStore>((set) => ({
     deleteTask: (taskId) => 
         set((state) => ({
             tasks: state.tasks.filter(task => task.id !== taskId)
+        })),
+
+    moveTask: (taskId , newStatus) =>
+        set((state) => ({
+            tasks: state.tasks.map((task) => {
+                if (task.id === taskId) {
+                    const updatedProgress = newStatus === 'Done' ? 100 : task.progress;
+                    return { ...task , status: newStatus , progress: updatedProgress };
+                }
+                return task;
+            }),
         })),
 
     setSearchQuery: (query) => set({ searchQuery: query}),

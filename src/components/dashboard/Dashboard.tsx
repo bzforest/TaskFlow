@@ -3,6 +3,7 @@ import TaskCard from './TaskCard';
 import FilterBar from './FilterBar';
 import TaskModal from './TaskModal';
 import type { TaskStatus } from '../../types';
+import TaskDetailModal from './TaskDetailModal';
 
 export default function Dashboard() {
   const { tasks, searchQuery, filterPriority, filterStatus } = useTaskStore();
@@ -29,6 +30,7 @@ export default function Dashboard() {
 
       <FilterBar />
       <TaskModal />
+      <TaskDetailModal />
       
       {/* Board Container */}
       <div className="flex-1 overflow-x-auto mt-2 scrollbar-hide">

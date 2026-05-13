@@ -71,7 +71,7 @@ function FormSelect<T extends string>({
 }
 
 export default function TaskModal() {
-    const { isModalOpen, closeModal, addTask } = useTaskStore();
+    const { isModalOpen, closeModal, addTask, currentUser } = useTaskStore();
 
     const [title, setTitle] = useState('');
     const [projectName, setProjectName] = useState('');
@@ -107,7 +107,9 @@ export default function TaskModal() {
             status,
             date: date || new Date().toISOString().split('T')[0],
             progress: status === 'Done' ? 100 : 0,
-            assignees: [] 
+            assignees: [
+                { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatar }
+            ] 
         };
 
         addTask(newTask);

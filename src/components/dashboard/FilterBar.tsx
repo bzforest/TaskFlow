@@ -115,7 +115,8 @@ export default function FilterBar() {
   const { 
     searchQuery, setSearchQuery, 
     filterPriority, setFilterPriority, 
-    filterStatus, setFilterStatus 
+    filterStatus, setFilterStatus,
+    openModal 
   } = useTaskStore();
 
   // Local State
@@ -160,7 +161,9 @@ export default function FilterBar() {
 
       <div className='flex justify-between items-center'>
         <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>Dashboard</h2>
-            <FlipButton />
+            <FlipButton
+                onClick={openModal}
+            />
       </div>
 
       <div className='flex flex-col xl:flex-row gap-3 pt-3'>

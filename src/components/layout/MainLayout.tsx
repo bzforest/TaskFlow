@@ -11,7 +11,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden scrollbar-hide">
         
         <Navbar />
 

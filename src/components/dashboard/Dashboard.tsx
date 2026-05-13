@@ -1,19 +1,35 @@
 import { useTaskStore } from '../../store/useTaskStore';
 import TaskCard from './TaskCard';
+import FilterBar from './FilterBar';
 import type { TaskStatus } from '../../types';
 
 export default function Dashboard() {
-  const { tasks } = useTaskStore();
+  const { tasks, searchQuery, filterPriority, filterStatus } = useTaskStore();
+
+  const filteredTasks = tasks.filter((task) => {
+
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.projectName.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesPriority = filterPriority === 'All' ? true : task.priority === filterPriority;
+
+    const matchesStatus = filterStatus === 'All' ? true : task.status === filterStatus;
+
+    return matchesSearch && matchesPriority && matchesStatus;
+  })
 
   const getTasksByStatus = (status: TaskStatus) => {
-    return tasks.filter(task => task.status === status);
+    return filteredTasks.filter(task => task.status === status);
   };
 
   return (
     <div className="h-full flex flex-col">
+
+      <FilterBar />
       
       {/* Board Container */}
-      <div className="flex-1 overflow-x-auto mt-2">
+      <div className="flex-1 overflow-x-auto mt-2 scrollbar-hide">
         <div className="flex w-full gap-6 h-full items-start">
           
           {/* To Do */}

@@ -11,16 +11,27 @@ interface TaskStore {
     filterStatus: TaskStatus | 'All';
     isDarkMode: boolean;
     isModalOpen: boolean;
+    selectedTask: Task | null;
+    isDetailModalOpen: boolean;
 
     // ACtion (การจัดการข้อมูล)
     addTask: (task: Task) => void;
     updateTask: (updateTask: Task) => void;
+    deleteTask: (taskId: string) => void;
     setSearchQuery: (query: string) => void;
     setFilterPriority: (priority: TaskPriority | 'All') => void;
     setFilterStatus: (status: TaskStatus | 'All') => void;
     toggleDarkMode: () => void;
     openModal: () => void;
     closeModal: () => void;
+    openDetailModal: (task: Task) => void;
+    closeDetailModal: () => void;
+
+    currentUser: {
+        id: string;
+        name: string;
+        avatarUrl?: string;
+    };
 }
 
 export const useTaskStore = create<TaskStore>((set) => ({
@@ -33,6 +44,15 @@ export const useTaskStore = create<TaskStore>((set) => ({
     isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
     isModalOpen: false,
 
+    currentUser: {
+        id: 'u1',
+        name: 'Best',
+        avatarUrl: 'https://i.pravatar.cc/150?img=1'
+    },
+
+    selectedTask: null,
+    isDetailModalOpen: false,
+
     addTask: (task) =>
         set((state) => ({ tasks: [...state.tasks, task] })),
 
@@ -41,6 +61,11 @@ export const useTaskStore = create<TaskStore>((set) => ({
             tasks: state.tasks.map((task) =>
                 task.id === updateTask.id ? updateTask : task
             ),
+        })),
+    
+    deleteTask: (taskId) => 
+        set((state) => ({
+            tasks: state.tasks.filter(task => task.id !== taskId)
         })),
 
     setSearchQuery: (query) => set({ searchQuery: query}),
@@ -60,4 +85,7 @@ export const useTaskStore = create<TaskStore>((set) => ({
 
     openModal: () => set({ isModalOpen: true }),
     closeModal: () => set({ isModalOpen: false }),
+
+    openDetailModal: (task) => set({ selectedTask: task, isDetailModalOpen: true }),
+    closeDetailModal: () => set({ selectedTask: null, isDetailModalOpen: false }),
 }));

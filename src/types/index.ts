@@ -7,6 +7,13 @@ export interface User {
     avatarUrl: string;
 }
 
+export interface ChecklistItem {
+    id: string;
+    title: string;
+    isCompleted: boolean;
+    assignee?: User;
+  }
+
 export interface Task {
     id: string;
     title: string;
@@ -17,4 +24,6 @@ export interface Task {
     status: TaskStatus;
     progress: number;
     assignees: User[];
+    description?: string; 
+    checklist?: ChecklistItem[];
 }

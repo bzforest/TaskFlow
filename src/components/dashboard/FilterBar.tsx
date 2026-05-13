@@ -4,6 +4,7 @@ import { Search, Plus, X, ChevronDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import type { TaskPriority, TaskStatus } from '../../types';
+import { useLocation } from 'react-router-dom';
 
 // Custom Dropdown
 interface DropdownProps<T> {
@@ -156,11 +157,17 @@ export default function FilterBar() {
     { label: 'Done', value: 'Done' },
   ];
 
+  const location = useLocation();
+
   return (
     <div className='flex flex-col gap-4 mb-6 relative z-30'>
 
       <div className='flex justify-between items-center'>
-        <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>Dashboard</h2>
+        {location.pathname === '/' ? (
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+        ) : (
+            <div></div>
+        )}
             <FlipButton
                 onClick={openModal}
             />

@@ -3,46 +3,36 @@ import { useTaskStore } from '../../store/useTaskStore';
 import TaskCard from './TaskCard';
 import FilterBar from './FilterBar';
 import TaskModal from './TaskModal';
-import type { TaskStatus } from '../../types';
-import Pagination from '../ui/Pagination';
 import TaskDetailModal from './TaskDetailModal';
+import Pagination from '../ui/Pagination';
+import type { TaskStatus } from '../../types';
 
-export default function Dashboard() {
-  const { tasks, searchQuery, filterPriority, filterStatus, moveTask, activeTab, currentUser } = useTaskStore();
+interface KanbanBoardProps {
+  mode: 'all' | 'my-tasks';
+}
 
+export default function KanbanBoard({ mode }: KanbanBoardProps) {
+  const { tasks, searchQuery, filterPriority, filterStatus, moveTask, currentUser } = useTaskStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredTasks = tasks.filter((task) => {
-
     const query = searchQuery.toLowerCase();
-
-    const matchesSearch =
-      task.title.toLowerCase().includes(query) ||
-      task.projectName.toLowerCase().includes(query) ||
-      task.priority.toLowerCase().includes(query) ||
-      task.status.toLowerCase().includes(query) ||
-      task.tag.toLowerCase().includes(query);
+    const matchesSearch = task.title.toLowerCase().includes(query) || 
+                         task.projectName.toLowerCase().includes(query) ||
+                         task.priority.toLowerCase().includes(query) ||
+                         task.status.toLowerCase().includes(query) ||
+                         task.tag.toLowerCase().includes(query);
 
     const matchesPriority = filterPriority === 'All' ? true : task.priority === filterPriority;
     const matchesStatus = filterStatus === 'All' ? true : task.status === filterStatus;
 
-    // Function หา Tasks ที่มี ID ของเรา เมื่ออยู่หน้า my-tasks
-    const matchesMyTasks = activeTab === 'my-tasks' 
-        ? task.assignees.some(assignee => assignee.id === currentUser.id)
-        : true;
+    // การกรองตามโหมด
+    const matchesMode = mode === 'my-tasks' 
+      ? task.assignees.some(a => a.id === currentUser.id) 
+      : true;
 
-    return matchesSearch && matchesPriority && matchesStatus && matchesMyTasks;
+    return matchesSearch && matchesPriority && matchesStatus && matchesMode;
   });
-
-  const [prevFilters, setPrevFilters] = useState({ searchQuery, filterPriority, filterStatus });
-    if (
-      searchQuery !== prevFilters.searchQuery ||
-      filterPriority !== prevFilters.filterPriority ||
-      filterStatus !== prevFilters.filterStatus
-    ){
-      setCurrentPage(1);
-      setPrevFilters({ searchQuery, filterPriority, filterStatus });
-    }
 
   const tasksPerColumn = 2;
 
@@ -74,9 +64,27 @@ export default function Dashboard() {
       moveTask(taskId , status);
     }
   };
-
+  
   return (
     <div className="h-full flex flex-col">
+
+        {mode === 'my-tasks' && (
+            <div className="mb-6 mt-2 p-5 bg-linear-to-r from-brand-blue/10 to-transparent dark:from-brand-blue/20 rounded-2xl border border-brand-blue/20 flex items-center gap-4">
+                <img 
+                    src={currentUser.avatarUrl || "https://i.pravatar.cc/150?img=11"} 
+                    alt="Profile" 
+                    className="w-14 h-14 rounded-full border-2 border-brand-blue shadow-sm"
+                />
+                <div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                        Hello, {currentUser.name}!
+                    </h2>
+                    <p className="text-status-gray-text text-sm mt-1">
+                        Here are all the tasks currently assigned to you. Let's get things done!
+                    </p>
+                </div>
+            </div>
+        )}
 
       <FilterBar />
       <TaskModal />

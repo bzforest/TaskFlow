@@ -2,12 +2,25 @@ import { useState, useEffect } from 'react';
 import { Search, Bell, Sun, Moon, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTaskStore } from '../../store/useTaskStore';
+import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 
 export default function Navbar() {
   const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery } = useTaskStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [localSearch , setLocalSearch] = useState(searchQuery);
+  const location = useLocation();
+
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/': return 'Dashboard';
+      case '/my-tasks': return 'My Tasks';
+      case '/analytics': return 'Analytics';
+      case '/team': return 'Team Directory';
+      case '/settings': return 'Settings';
+      default: return 'TaskFlow';
+    }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,7 +35,7 @@ export default function Navbar() {
       
       {/* ด้านซ้าย */}
       <div className="flex items-center">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">{getPageTitle()}</h1>
       </div>
 
       {/* ด้านขวา */}

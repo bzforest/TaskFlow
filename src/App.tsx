@@ -14,7 +14,8 @@ function App() {
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode]);
+  }, [isDarkMode]); 
+
   return (
     <>
       {isDarkMode ? <HexagonBackground /> : <BubbleBackground />}

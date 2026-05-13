@@ -215,7 +215,7 @@ export default function TaskDetailModal() {
                                 onKeyDown={(e) => e.key === 'Enter' && handleAddChecklist()}
                                 className="flex-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-brand-blue text-gray-900 dark:text-white"
                             />
-                            <button onClick={handleAddChecklist} className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                            <button onClick={handleAddChecklist} className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer">
                                 Add
                             </button>
                         </div>

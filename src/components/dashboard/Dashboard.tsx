@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { useTaskStore } from '../../store/useTaskStore';
 import TaskCard from './TaskCard';
 import FilterBar from './FilterBar';
 import TaskModal from './TaskModal';
 import type { TaskStatus } from '../../types';
+import Pagination from '../ui/Pagination';
 import TaskDetailModal from './TaskDetailModal';
 
 export default function Dashboard() {
   const { tasks, searchQuery, filterPriority, filterStatus, moveTask } = useTaskStore();
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredTasks = tasks.filter((task) => {
 
@@ -20,15 +24,39 @@ export default function Dashboard() {
       task.tag.toLowerCase().includes(query);
 
     const matchesPriority = filterPriority === 'All' ? true : task.priority === filterPriority;
-
     const matchesStatus = filterStatus === 'All' ? true : task.status === filterStatus;
 
     return matchesSearch && matchesPriority && matchesStatus;
-  })
+  });
+
+  const [prevFilters, setPrevFilters] = useState({ searchQuery, filterPriority, filterStatus });
+    if (
+      searchQuery !== prevFilters.searchQuery ||
+      filterPriority !== prevFilters.filterPriority ||
+      filterStatus !== prevFilters.filterStatus
+    ){
+      setCurrentPage(1);
+      setPrevFilters({ searchQuery, filterPriority, filterStatus });
+    }
+
+  const tasksPerColumn = 2;
+
+  const todoTasks = filteredTasks.filter(task => task.status === 'To Do');
+  const inProgressTasks = filteredTasks.filter(task => task.status === 'In Progress')
+  const doneTasks = filteredTasks.filter(task => task.status === 'Done')
+
+  const maxColumnLength = Math.max(todoTasks.length, inProgressTasks.length, doneTasks.length);
+  const totalPages = Math.max(1, Math.ceil(maxColumnLength / tasksPerColumn));
 
   const getTasksByStatus = (status: TaskStatus) => {
-    return filteredTasks.filter(task => task.status === status);
-  };
+    const startIndex = (currentPage - 1) * tasksPerColumn;
+    const endIndex = startIndex + tasksPerColumn;
+
+    if (status === 'To Do') return todoTasks.slice(startIndex , endIndex);
+    if (status === 'In Progress') return inProgressTasks.slice(startIndex , endIndex);
+    if (status === 'Done') return doneTasks.slice(startIndex , endIndex);
+    return [];
+  }
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -106,6 +134,15 @@ export default function Dashboard() {
 
         </div>
       </div>
+
+      {/* Pagination */}
+      <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredTasks.length}
+            onPageChange={setCurrentPage}
+          />
+
     </div>
   );
 }

@@ -41,8 +41,9 @@ export const useTaskStore = create<TaskStore>((set) => ({
     filterPriority: 'All',
     filterStatus: 'All',
 
-    // เช็คว่าผู้ใช้งานเปิด darkMode ไว้ในเครื่องมั้ย ถ้ามีจะใช้ตามเครื่อง
-    isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    // เช็ค Local Storage ก่อนเลย ถ้าไม่มีค่อยไปเช็คจากระบบเครื่อง
+    isDarkMode: localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches),
     isModalOpen: false,
 
     currentUser: {
@@ -89,8 +90,10 @@ export const useTaskStore = create<TaskStore>((set) => ({
             const newDarkMode = !state.isDarkMode;
             if (newDarkMode) {
                 document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
             } else {
                 document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
             }
             return { isDarkMode: newDarkMode };
         }),

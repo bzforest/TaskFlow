@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AnalyticsPage from './pages/AnalyticsPage';
 import MyTasks from './pages/MyTasksPage';
 import Dashboard from './pages/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   const { isDarkMode } = useTaskStore();
@@ -31,8 +32,7 @@ function App() {
           <Route path="/analytics" element={<AnalyticsPage />} />         
           <Route path="/team" element={<ComingSoon title="Team" />} />
           <Route path="/settings" element={<ComingSoon title="Settings" />} />
-          {/* แปะไว้ ไว้ทำ 404  */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

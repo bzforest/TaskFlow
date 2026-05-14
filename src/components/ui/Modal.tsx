@@ -48,7 +48,7 @@ export default function Modal ({ isOpen , onClose , title , children }: ModalPro
                             </h2>
                             <button
                                 onClick={onClose}
-                                className='p-2 rounded-lg text-status-gray-text hover:bg-gray-200 dark:hover:bg-gray-700'
+                                className='p-2 rounded-lg text-status-gray-text hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer hover:scale-105'
                             >
                                 <X size={20}/>
                             </button>

@@ -186,7 +186,7 @@ export default function FilterBar() {
   const location = useLocation();
 
   return (
-    <div className='flex flex-col gap-4 mb-6 relative z-30'>
+    <div className='flex flex-col gap-4 mb-6 relative z-20'>
 
       <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
         {location.pathname === '/' ? (

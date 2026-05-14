@@ -1,11 +1,77 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTaskStore } from '../../store/useTaskStore';
 import Modal from '../ui/Modal';
-import { Trash2, Edit2, Plus, X, Users, AlertTriangle, Check } from 'lucide-react';
+import { Trash2, Edit2, Plus, X, Users, AlertTriangle, Check, Calendar, ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
-import type { Task, ChecklistItem } from '../../types';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Task, ChecklistItem, TaskPriority, TaskStatus } from '../../types';
 import AnimatedProgress from '../ui/AnimatedProgress';
 import AnimatedAvatarGroup from '../ui/AnimatedAvatarGroup';
+import CustomDatePicker from '../ui/CustomDatePicker';
+
+// Custom Dropdown สำหรับโหมดแก้ไข
+function FormSelect<T extends string>({ 
+    value, options, onChange 
+}: { 
+    value: T; options: { label: string; value: T }[]; onChange: (val: T) => void; 
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsOpen(false);
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const selectedLabel = options.find((opt) => opt.value === value)?.label || value;
+
+    return (
+        <div className="relative w-full" ref={dropdownRef}>
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className={clsx(
+                    "w-full flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-800 border rounded-lg text-sm transition-all duration-200 cursor-pointer focus:outline-none",
+                    isOpen ? "border-brand-blue ring-1 ring-brand-blue" : "border-gray-300 dark:border-gray-700"
+                )}
+            >
+                <span className="text-gray-900 dark:text-white">{selectedLabel}</span>
+                <ChevronDown size={16} className={clsx("text-status-gray-text transition-transform duration-300", isOpen && "rotate-180")} />
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.ul
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden py-1"
+                    >
+                        {options.map((opt) => (
+                            <li key={opt.value}>
+                                <button
+                                    type="button"
+                                    onClick={() => { onChange(opt.value); setIsOpen(false); }}
+                                    className={clsx(
+                                        "w-full flex items-center justify-between px-3 py-2.5 text-sm transition-colors cursor-pointer",
+                                        value === opt.value ? "text-brand-blue bg-brand-blue/5 font-semibold" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    )}
+                                >
+                                    {opt.label}
+                                    {value === opt.value && <Check size={14} className="text-brand-blue" />}
+                                </button>
+                            </li>
+                        ))}
+                    </motion.ul>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
 
 export default function TaskDetailModal() {
     const { selectedTask , isDetailModalOpen , closeDetailModal , updateTask , deleteTask , currentUser } = useTaskStore();
@@ -27,6 +93,31 @@ export default function TaskDetailModal() {
 
     if (!selectedTask || !draftTask) return null;
 
+    const priorityOptions: { label: string; value: TaskPriority }[] = [
+        { label: 'Low', value: 'Low' },
+        { label: 'Medium', value: 'Medium Priority' },
+        { label: 'High', value: 'High Priority' },
+    ];
+    
+    const statusOptions: { label: string; value: TaskStatus }[] = [
+        { label: 'To Do', value: 'To Do' },
+        { label: 'In Progress', value: 'In Progress' },
+        { label: 'Done', value: 'Done' },
+    ];
+
+    // สีสำหรับ Badge โหมดแสดงผล
+    const getPriorityColor = (priority: string) => {
+        if (priority === 'High Priority') return 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400';
+        if (priority === 'Medium Priority') return 'text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400';
+        return 'text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400';
+    };
+
+    const getStatusColor = (status: string) => {
+        if (status === 'Done') return 'text-status-green-text bg-status-green-bg/50 dark:bg-status-green-bg/20';
+        if (status === 'In Progress') return 'text-status-blue-text bg-status-blue-bg/50 dark:bg-status-blue-bg/20';
+        return 'text-status-gray-text bg-status-gray-bg/50 dark:bg-status-gray-bg/20';
+    };
+
     const handleSave = () => {
         updateTask(draftTask);
         setIsEditing(false);
@@ -41,43 +132,25 @@ export default function TaskDetailModal() {
         const updatedChecklist = (draftTask.checklist || []).map(item =>
             item.id === checkId ? { ...item, isCompleted: !item.isCompleted } : item
         );
-
-        // คำนวน Progress
         const completedCount = updatedChecklist.filter(item => item.isCompleted).length;
         const totalCount = updatedChecklist.length;
         const newProgress = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
-
-        // อัปเดต status ตาม Progress
         let newStatus = draftTask.status;
+
         if (newProgress === 100) newStatus = 'Done';
         else if (newProgress > 0 && newProgress < 100) newStatus = 'In Progress';
         else if (newProgress === 0) newStatus = 'To Do';
         
-        // 
-        const updatedTask = {
-            ...draftTask,
-            checklist: updatedChecklist,
-            progress: newProgress,
-            status: newStatus
-        };
-
+        const updatedTask = { ...draftTask, checklist: updatedChecklist, progress: newProgress, status: newStatus };
         setDraftTask(updatedTask);
-
-        // ถ้าไม่ได้อยู่ในโหมด Edit ก็ยังสามารถ checklist ได้
         if (!isEditing) updateTask(updatedTask);
     };
 
     const handleAddChecklist = () => {
         if (!newChecklistTitle.trim()) return;
-        
-        const newItem: ChecklistItem = {
-            id: Date.now().toString(),
-            title: newChecklistTitle,
-            isCompleted: false
-        };
+        const newItem: ChecklistItem = { id: Date.now().toString(), title: newChecklistTitle, isCompleted: false };
         const updatedChecklist = [...(draftTask.checklist || []), newItem];
 
-        // คำนวน Progress ใหม่
         const completedCount = updatedChecklist.filter(item => item.isCompleted).length;
         const totalCount = updatedChecklist.length;
         const newProgress = Math.round((completedCount / totalCount) * 100);
@@ -86,10 +159,8 @@ export default function TaskDetailModal() {
         setNewChecklistTitle('');
     };
 
-    // จำลองเพิ่มผู้รับผิดชอบ
     const handleJoinTask = () => {
         const isAlreadyAssigned = draftTask.assignees.some(u => u.id === currentUser.id);
-        
         if (!isAlreadyAssigned) {
             setDraftTask({
                 ...draftTask,
@@ -98,11 +169,9 @@ export default function TaskDetailModal() {
         }
     };
 
-
     return (
         <Modal isOpen={isDetailModalOpen} onClose={closeDetailModal} title={isEditing ? "Edit Task" : "Task Details"}>
         
-        {/* ยืนยันการลบ */}
         {showDeleteConfirm && (
             <div className="absolute inset-0 z-50 bg-white/95 dark:bg-brand-navy/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center rounded-2xl">
             <AlertTriangle size={48} className="text-red-500 mb-4" />
@@ -115,34 +184,102 @@ export default function TaskDetailModal() {
             </div>
         )}
 
-        {/* content */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 max-h-[60vh] md:max-h-[75vh] overflow-y-auto pr-2 scrollbar-hide">
             
-            {/* Title & Description */}
+            {/* Header Info (View & Edit Mode) */}
             <div>
-            {isEditing ? (
-                <input 
-                type="text" 
-                value={draftTask.title} 
-                onChange={(e) => setDraftTask({...draftTask, title: e.target.value})}
-                className="w-full text-xl font-bold px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-brand-blue mb-3 text-gray-900 dark:text-white"
-                />
-            ) : (
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{draftTask.title}</h3>
-            )}
+                {isEditing ? (
+                    <div className="flex flex-col gap-4">
+                        {/* Edit Title */}
+                        <input 
+                            type="text" 
+                            value={draftTask.title} 
+                            onChange={(e) => setDraftTask({...draftTask, title: e.target.value})}
+                            className="w-full text-xl font-bold px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-brand-blue text-gray-900 dark:text-white"
+                            placeholder="Task Title"
+                        />
+                        {/* Edit Project Name & Tag */}
+                        <div className='flex flex-col sm:flex-row gap-4'>
+                            <div className='flex-1'>
+                                <label className='block text-xs font-semibold text-gray-500 mb-1'>Project Name</label>
+                                <input 
+                                    type='text'
+                                    value={draftTask.projectName}
+                                    onChange={(e) => setDraftTask({...draftTask, projectName: e.target.value})}
+                                    className='w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-brand-blue text-gray-900 dark:text-white'
+                                />
+                            </div>
+                            <div className='w-full sm:w-1/3'>
+                                <label className='block text-xs font-semibold text-gray-500 mb-1'>Tag</label>
+                                <input 
+                                    type='text'
+                                    value={draftTask.tag}
+                                    onChange={(e) => setDraftTask({...draftTask, tag: e.target.value})}
+                                    className='w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-brand-blue text-gray-900 dark:text-white'
+                                />
+                            </div>
+                        </div>
+                        {/* Edit Priority & Status */}
+                        <div className='flex flex-col sm:flex-row gap-4'>
+                            <div className='flex-1 relative z-20'>
+                                <label className='block text-xs font-semibold text-gray-500 mb-1'>Priority</label>
+                                <FormSelect value={draftTask.priority} options={priorityOptions} onChange={(val) => setDraftTask({...draftTask, priority: val})} />
+                            </div>
+                            <div className='flex-1 relative z-20'>
+                                <label className='block text-xs font-semibold text-gray-500 mb-1'>Status</label>
+                                <FormSelect value={draftTask.status} options={statusOptions} onChange={(val) => setDraftTask({...draftTask, status: val})} />
+                            </div>
+                        </div>
+                        {/* Edit Date */}
+                        <div className="relative z-10">
+                            <label className='block text-xs font-semibold text-gray-500 mb-1'>Due Date</label>
+                            <CustomDatePicker 
+                                value={draftTask.date}
+                                onChange={(val) => setDraftTask({...draftTask, date: val})}
+                            />
+                        </div>
+                        {/* Edit Description */}
+                        <div className="relative z-0">
+                            <label className='block text-xs font-semibold text-gray-500 mb-1'>Description</label>
+                            <textarea 
+                                placeholder="Add a more detailed description..."
+                                value={draftTask.description || ''} 
+                                onChange={(e) => setDraftTask({...draftTask, description: e.target.value})}
+                                className="w-full h-24 px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-brand-blue resize-none text-gray-900 dark:text-white"
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-3">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{draftTask.title}</h3>
+                        
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">
+                                {draftTask.projectName}
+                            </span>
+                            {draftTask.tag && (
+                                <span className="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">
+                                    {draftTask.tag}
+                                </span>
+                            )}
+                            <span className={clsx("px-2.5 py-1 text-xs font-semibold rounded-md", getPriorityColor(draftTask.priority))}>
+                                {draftTask.priority}
+                            </span>
+                            <span className={clsx("px-2.5 py-1 text-xs font-semibold rounded-md", getStatusColor(draftTask.status))}>
+                                {draftTask.status}
+                            </span>
+                        </div>
 
-            {isEditing ? (
-                <textarea 
-                placeholder="Add a more detailed description..."
-                value={draftTask.description || ''} 
-                onChange={(e) => setDraftTask({...draftTask, description: e.target.value})}
-                className="w-full h-24 px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-brand-blue resize-none text-gray-900 dark:text-white"
-                />
-            ) : (
-                <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg min-h-[60px]">
-                {draftTask.description || <span className="text-gray-400 italic">No description provided.</span>}
-                </p>
-            )}
+                        <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                            <Calendar size={14} />
+                            <span>{draftTask.date || "No due date"}</span>
+                        </div>
+
+                        <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg min-h-[60px] mt-2">
+                            {draftTask.description || <span className="text-gray-400 italic">No description provided.</span>}
+                        </p>
+                    </div>
+                )}
             </div>
     
             {/* Progress Bar */}

@@ -2,7 +2,7 @@
 
 **Tech Stack:** React + TypeScript + Tailwind CSS + Vite
 **State Management:** Zustand
-**Libraries เพิ่มเติม:** Framer Motion (Animation), Recharts (กราฟ), html2canvas & jspdf (Export PDF), Lucide React (Icons)
+**Libraries เพิ่มเติม:** Framer Motion (Animation), Recharts (กราฟ), html-to-image & jspdf (Export PDF), Lucide React (Icons)
 
 ---
 

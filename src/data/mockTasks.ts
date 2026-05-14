@@ -1,6 +1,5 @@
 import type { Task } from '../types';
 
-// จำลองข้อมูล User 10 คน (Avatar)
 const users = {
   user1: { id: 'u1', name: 'Best', avatarUrl: 'https://i.pravatar.cc/150?img=1' },
   user2: { id: 'u2', name: 'Bow', avatarUrl: 'https://i.pravatar.cc/150?img=2' },

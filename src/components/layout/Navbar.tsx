@@ -15,7 +15,7 @@ export default function Navbar() {
     switch (location.pathname) {
       case '/': return 'Dashboard';
       case '/my-tasks': return 'My Tasks';
-      case '/analytics': return 'Analytics';
+      case '/analytics': return 'Analytics Dashboard';
       case '/team': return 'Team Directory';
       case '/settings': return 'Settings';
       default: return 'TaskFlow';

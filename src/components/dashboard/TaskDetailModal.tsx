@@ -4,8 +4,8 @@ import Modal from '../ui/Modal';
 import { Trash2, Edit2, Plus, X, Users, AlertTriangle, Check } from 'lucide-react';
 import clsx from 'clsx';
 import type { Task, ChecklistItem } from '../../types';
-import AnimatedProgress from './AnimatedProgress';
-import AnimatedAvatarGroup from './AnimatedAvatarGroup';
+import AnimatedProgress from '../ui/AnimatedProgress';
+import AnimatedAvatarGroup from '../ui/AnimatedAvatarGroup';
 
 export default function TaskDetailModal() {
     const { selectedTask , isDetailModalOpen , closeDetailModal , updateTask , deleteTask , currentUser } = useTaskStore();

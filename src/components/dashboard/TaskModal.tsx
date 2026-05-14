@@ -108,7 +108,7 @@ export default function TaskModal() {
             date: date || new Date().toISOString().split('T')[0],
             progress: status === 'Done' ? 100 : 0,
             assignees: [
-                { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatar }
+                { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl || ""}
             ] 
         };
 
@@ -139,7 +139,7 @@ export default function TaskModal() {
 
     return (
         <Modal isOpen={isModalOpen} onClose={handleClose} title='Create New Task'>
-            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-2 md:gap-4'>
 
                 { /* Title */ }
                 <div>

@@ -1,8 +1,8 @@
 import { Calendar } from 'lucide-react';
 import type { Task } from '../../types';
 import clsx from 'clsx';
-import AnimatedProgress from './AnimatedProgress';
-import AnimatedAvatarGroup from './AnimatedAvatarGroup';
+import AnimatedProgress from '../ui/AnimatedProgress';
+import AnimatedAvatarGroup from '../ui/AnimatedAvatarGroup';
 import { useTaskStore } from '../../store/useTaskStore';
 
 interface TaskCardProps {

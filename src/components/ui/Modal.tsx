@@ -39,7 +39,7 @@ export default function Modal ({ isOpen , onClose , title , children }: ModalPro
                         animate={{ opacity: 1 , scale: 1 , y: 0 }}
                         exit={{ opacity: 0 , scale: 0.95 , y: 20 }}
                         transition={{ type: "spring" , duration: 0.5 , bounce: 0.3 }}
-                        className='relative w-full max-w-lg bg-white dark:bg-brand-navy rounded-2xl shadow-2xl border border-brand-grey-border dark:border-gray-700 flex flex-col'
+                        className='relative w-full md:max-w-lg scale-90 sm:scale-100 bg-white dark:bg-brand-navy rounded-2xl shadow-2xl border border-brand-grey-border dark:border-gray-700 flex flex-col'
                     >
                         { /* Head */ }
                         <div className='flex items-center justify-between px-6 py-4 border-b border-brand-grey-border dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 rounded-t-2xl'>

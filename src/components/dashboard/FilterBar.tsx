@@ -91,7 +91,7 @@ function FlipButton({ onClick }: { onClick?: () => void }) {
     return (
       <button 
         onClick={onClick}
-        className="group relative h-[42px] px-4 overflow-hidden rounded-lg bg-brand-blue hover:bg-violet-400 dark:hover:bg-brand-blue-hover/60 text-white font-semibold shadow-lg shadow-brand-blue/20 transition-colors cursor-pointer"
+        className="hidden md:block group relative h-[42px] px-4 overflow-hidden rounded-lg bg-brand-blue hover:bg-violet-400 dark:hover:bg-brand-blue-hover/60 text-white font-semibold shadow-lg shadow-brand-blue/20 transition-colors cursor-pointer"
       >
         {/* เมื่อ Hover จะเลื่อนแกน Y ขึ้นไปครึ่งนึง (-1/2) ด้วยอนิเมชันแบบสปริง (cubic-bezier) */}
         <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group-hover:-translate-y-1/2">
@@ -105,6 +105,32 @@ function FlipButton({ onClick }: { onClick?: () => void }) {
           {/* หน้าที่สอง */}
           <div className="flex items-center justify-center gap-2 h-[42px]">
             <span className="hidden sm:inline text-amber-300">Create Now!</span>
+          </div>
+  
+        </div>
+      </button>
+    );
+  }
+
+  function FlipButtonMobile({ onClick }: { onClick?: () => void }) {
+
+    return (
+      <button 
+        onClick={onClick}
+        className="md:hidden group relative h-[42px] px-4 overflow-hidden rounded-lg bg-brand-blue hover:bg-violet-400 dark:hover:bg-brand-blue-hover/60 text-white font-semibold shadow-lg shadow-brand-blue/20 transition-colors cursor-pointer w-full"
+      >
+        {/* เมื่อ Hover จะเลื่อนแกน Y ขึ้นไปครึ่งนึง (-1/2) ด้วยอนิเมชันแบบสปริง (cubic-bezier) */}
+        <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group-hover:-translate-y-1/2">
+          
+          {/* หน้าแรก */}
+          <div className="flex items-center justify-center gap-2 h-[42px]">
+            <Plus size={18} />
+            <span className="inline">New Task</span>
+          </div>
+          
+          {/* หน้าที่สอง */}
+          <div className="flex items-center justify-center gap-2 h-[42px]">
+            <span className="inline text-amber-300">Create Now!</span>
           </div>
   
         </div>
@@ -162,9 +188,9 @@ export default function FilterBar() {
   return (
     <div className='flex flex-col gap-4 mb-6 relative z-30'>
 
-      <div className='flex justify-between items-center'>
+      <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
         {location.pathname === '/' ? (
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white md:block hidden">Dashboard</h2>
         ) : (
             <div></div>
         )}
@@ -173,7 +199,10 @@ export default function FilterBar() {
             />
       </div>
 
-      <div className='flex flex-col xl:flex-row gap-3 pt-3'>
+{/* Search & Filter */}
+<div className='flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4'>
+        
+        {/* Search */}
         <div className='relative flex-1 group'>
           <Search className='absolute left-3 top-1/2 -translate-y-1/2 text-status-gray-text group-focus-within:text-brand-blue transition-colors' size={18} />
           <input 
@@ -186,37 +215,52 @@ export default function FilterBar() {
           />
         </div>
 
-        <div className='flex flex-wrap items-center gap-3'>
-          <CustomSelect 
-            label="Priority" 
-            value={localPriority} //  ผูกกับ Local State
-            options={priorityOptions} 
-            onChange={(val) => setLocalPriority(val as TaskPriority | 'All')}
-            width="170px"
-          />
+        {/* Filters */}
+        <div className='flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3'>
 
-          <CustomSelect 
-            label="Status" 
-            value={localStatus} // ผูกกับ Local State
-            options={statusOptions} 
-            onChange={(val) => setLocalStatus(val as TaskStatus | 'All')}
-            width="160px"
-          />
+          <div className="grid grid-cols-2 sm:flex items-center gap-3 w-full sm:w-auto">
+            <div className="w-full sm:w-[170px]">
+              <CustomSelect 
+                label="Priority" 
+                value={localPriority}
+                options={priorityOptions} 
+                onChange={(val) => setLocalPriority(val as TaskPriority | 'All')}
+                width="100%"
+              />
+            </div>
+            <div className="w-full sm:w-[170px]">
+              <CustomSelect 
+                label="Status" 
+                value={localStatus}
+                options={statusOptions} 
+                onChange={(val) => setLocalStatus(val as TaskStatus | 'All')}
+                width="100%"
+              />
+            </div>
+          </div>
 
-          <button 
-            onClick={handleSearch}
-            className="flex items-center justify-center bg-white dark:bg-brand-navy hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-brand-grey-border dark:border-gray-700 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer h-[42px]"
-          >
-            <Search size={18}/>
-          </button>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <button 
+              onClick={handleSearch}
+              className="flex-1 sm:flex-none flex items-center justify-center bg-white dark:bg-brand-navy hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-brand-grey-border dark:border-gray-700 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer h-[42px]"
+            >
+              <Search size={18} className="sm:mr-0 mr-2" />
+              <span className="sm:hidden">Search</span> 
+            </button>
 
-          <button
-            onClick={handleClearFilter}
-            title="Clear Filters"
-            className='flex items-center justify-center w-[42px] h-[42px] bg-white dark:bg-brand-navy border border-brand-grey-border dark:border-gray-700 rounded-lg text-status-gray-text hover:text-brand-red hover:border-brand-red transition-all shadow-sm cursor-pointer'
-          >
-            <X size={18}/>
-          </button>
+            <button
+              onClick={handleClearFilter}
+              title="Clear Filters"
+              className='flex items-center justify-center w-[42px] h-[42px] shrink-0 bg-white dark:bg-brand-navy border border-brand-grey-border dark:border-gray-700 rounded-lg text-status-gray-text hover:text-brand-red hover:border-brand-red transition-all shadow-sm cursor-pointer'
+            >
+              <X size={18}/>
+            </button>
+          </div>
+
+          <div className='w-full sm:hidden mt-2'>
+            <FlipButtonMobile onClick={openModal} />
+          </div>
+
         </div>
       </div>
     </div>

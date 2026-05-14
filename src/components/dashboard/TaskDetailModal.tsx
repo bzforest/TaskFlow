@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTaskStore } from '../../store/useTaskStore';
 import Modal from '../ui/Modal';
-import { Trash2, Edit2, CheckSquare, Plus, X, Users, AlertTriangle, Check } from 'lucide-react';
+import { Trash2, Edit2, Plus, X, Users, AlertTriangle, Check } from 'lucide-react';
 import clsx from 'clsx';
 import type { Task, ChecklistItem } from '../../types';
 import AnimatedProgress from './AnimatedProgress';

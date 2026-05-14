@@ -79,7 +79,7 @@ export default function KanbanBoard({ mode }: KanbanBoardProps) {
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                         Hello, {currentUser.name}!
                     </h2>
-                    <p className="text-status-gray-text text-sm mt-1">
+                    <p className="md:block hidden text-status-gray-text text-sm mt-1">
                         Here are all the tasks currently assigned to you. Let's get things done!
                     </p>
                 </div>
@@ -91,14 +91,14 @@ export default function KanbanBoard({ mode }: KanbanBoardProps) {
       <TaskDetailModal />
       
       {/* Board Container */}
-      <div className="flex-1 overflow-x-auto mt-2 scrollbar-hide">
-        <div className="flex w-full gap-6 h-full items-start">
+      <div className="flex-1 mt-2 scrollbar-hide">
+        <div className="flex flex-col xl:flex-row w-full gap-6 h-full items-start">
           
           {/* To Do */}
           <div 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, 'To Do')}
-            className="flex-1 min-w-[300px] flex flex-col">
+            className="w-full xl:flex-1 xl:min-w-[300px] flex flex-col">
           
             <div className="bg-status-gray-bg text-status-gray-text font-bold text-sm py-3 px-4 rounded-t-2xl text-center">
               To Do
@@ -115,7 +115,7 @@ export default function KanbanBoard({ mode }: KanbanBoardProps) {
           <div 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, 'In Progress')}
-            className="flex-1 min-w-[300px] flex flex-col">
+            className="w-full xl:flex-1 xl:min-w-[300px] flex flex-col">
 
             <div className="bg-status-blue-bg text-status-blue-text font-bold text-sm py-3 px-4 rounded-t-2xl text-center">
               In Progress
@@ -132,7 +132,7 @@ export default function KanbanBoard({ mode }: KanbanBoardProps) {
           <div 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, 'Done')}          
-            className="flex-1 min-w-[300px] flex flex-col">
+            className="w-full xl:flex-1 xl:min-w-[300px] flex flex-col">
 
             <div className="bg-status-green-bg text-status-green-text font-bold text-sm py-3 px-4 rounded-t-2xl text-center">
               Done

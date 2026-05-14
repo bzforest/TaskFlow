@@ -16,6 +16,7 @@ interface TaskStore {
     selectedTask: Task | null;
     isDetailModalOpen: boolean;
     activeTab: TabType;
+    isMobileMenuOpen: boolean;
 
     // ACtion (การจัดการข้อมูล)
     addTask: (task: Task) => void;
@@ -31,6 +32,7 @@ interface TaskStore {
     openDetailModal: (task: Task) => void;
     closeDetailModal: () => void;
     setActiveTab: (tab: TabType) => void;
+    setMobileMenuOpen: (isOpen: boolean) => void;
 
     currentUser: {
         id: string;
@@ -44,6 +46,9 @@ export const useTaskStore = create<TaskStore>((set) => ({
     // dashboard หน้าเริ่มต้น
     activeTab: 'dashboard',
     setActiveTab: (tab) => set({ activeTab: tab }),
+
+    isMobileMenuOpen: false,
+    setMobileMenuOpen: (isOpen) => set({ isMobileMenuOpen: isOpen }),
 
     tasks: initialTasks,
     searchQuery: '',

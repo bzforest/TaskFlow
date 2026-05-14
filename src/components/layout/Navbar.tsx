@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Sun, Moon, ChevronDown, User, CheckSquare, Settings, LogOut } from 'lucide-react';
+import { Search, Bell, Sun, Moon, ChevronDown, User, CheckSquare, Settings, LogOut, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTaskStore } from '../../store/useTaskStore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 export default function Navbar() {
-  const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery, currentUser } = useTaskStore();
+  const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery, currentUser, setMobileMenuOpen, isMobileMenuOpen } = useTaskStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [localSearch , setLocalSearch] = useState(searchQuery);
   const location = useLocation();
@@ -66,15 +66,21 @@ export default function Navbar() {
   };
 
   return (
-    <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-50">
+    <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-30">
       
       {/* ด้านซ้าย */}
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
+        <button 
+          onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden text-status-gray-text hover:text-brand-blue transition-colors"
+        >
+          <Menu size={24} />
+        </button>
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">{getPageTitle()}</h1>
       </div>
 
       {/* ด้านขวา */}
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-2 md:space-x-6">
         
         {/* ช่อง Search หลัก */}
         <div className="relative hidden md:block group">

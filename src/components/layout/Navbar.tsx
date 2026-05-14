@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Search, Bell, Sun, Moon, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search, Bell, Sun, Moon, ChevronDown, User, CheckSquare, Settings, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTaskStore } from '../../store/useTaskStore';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 export default function Navbar() {
-  const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery } = useTaskStore();
+  const { isDarkMode, toggleDarkMode, searchQuery, setSearchQuery, currentUser } = useTaskStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [localSearch , setLocalSearch] = useState(searchQuery);
   const location = useLocation();
+  const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -30,8 +32,41 @@ export default function Navbar() {
     return () => clearTimeout(timer);
   }, [localSearch , setSearchQuery])
 
+  const handleNotiOpen = () => {
+    alert("Feature is under construction")
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    };
+    document.addEventListener('mousedown' , handleClickOutside);
+    return () => document.removeEventListener('mousedown' , handleClickOutside);
+  }, []);
+
+  const handleMenuClick = (action: string) => {
+    setIsDropdownOpen(false);
+
+    switch (action) {
+      case 'profile':
+        alert("Profile feature is under construction");
+        break;
+      case 'mytasks':
+        navigate('/my-tasks');
+        break;
+      case 'settings':
+        navigate('/settings');
+        break;
+      case 'logout':
+        alert("Logging out of TaskFlow...")
+        break
+    }
+  };
+
   return (
-    <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-10">
+    <header className="h-20 bg-white dark:bg-brand-navy border-b border-brand-grey-border dark:border-transparent flex items-center justify-between px-6 transition-colors duration-300 z-50">
       
       {/* ด้านซ้าย */}
       <div className="flex items-center">
@@ -54,7 +89,9 @@ export default function Navbar() {
         </div>
 
         {/* ปุ่มแจ้งเตือน */}
-        <button className="relative text-status-gray-text hover:text-brand-blue transition-transform hover:scale-110 cursor-pointer">
+        <button 
+          onClick={handleNotiOpen}
+          className="relative text-status-gray-text hover:text-brand-blue transition-transform hover:scale-110 cursor-pointer">
           <Bell size={20} />
           <span className="absolute -top-1 -right-1 flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
@@ -95,29 +132,61 @@ export default function Navbar() {
         </button>
 
         {/* Avatar Dropdown */}
-        <div 
-          className="flex items-center space-x-2 cursor-pointer group"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          <img 
-            src="https://i.pravatar.cc/150?img=11" 
-            alt="User Avatar" 
-            className="w-9 h-9 rounded-full border-2 border-brand-grey-border dark:border-transparent group-hover:border-brand-blue transition-colors"
-          />
-          <div className="hidden md:flex items-center space-x-2">
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">Best Sakditat</span>
-              <span className="text-xs text-status-gray-text">Admin</span>
-            </div>
-            
-            <ChevronDown 
-              size={16} 
-              className={clsx(
-                "text-status-gray-text transition-transform duration-300",
-                isDropdownOpen ? "rotate-180" : "rotate-0"
-              )} 
+        <div className="relative" ref={dropdownRef}>
+          <div 
+            className="flex items-center space-x-2 cursor-pointer group"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <img 
+              src={currentUser.avatarUrl || "https://i.pravatar.cc/150?img=11"} 
+              alt="User Avatar" 
+              className="w-9 h-9 rounded-full border-2 border-brand-grey-border dark:border-transparent group-hover:border-brand-blue transition-colors"
             />
+            <div className="hidden md:flex items-center space-x-2">
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">{currentUser.name}</span>
+                <span className="text-xs text-status-gray-text">Admin</span>
+              </div>
+              
+              <ChevronDown 
+                size={16} 
+                className={clsx(
+                  "text-status-gray-text transition-transform duration-300",
+                  isDropdownOpen ? "rotate-180" : "rotate-0"
+                )} 
+              />
+            </div>
           </div>
+          <AnimatePresence>
+            {isDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute right-0 top-full mt-3 w-48 bg-white dark:bg-brand-navy border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden z-50"
+              >
+                <div className="p-1.5 flex flex-col gap-0.5">
+                  <button onClick={() => handleMenuClick('profile')} className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer">
+                    <User size={16} className="mr-3 text-status-gray-text" /> Profile
+                  </button>
+                  <button onClick={() => handleMenuClick('mytasks')} className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer">
+                    <CheckSquare size={16} className="mr-3 text-status-gray-text" /> My Tasks
+                  </button>
+                  <button onClick={() => handleMenuClick('settings')} className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer">
+                    <Settings size={16} className="mr-3 text-status-gray-text" /> Settings
+                  </button>
+                  
+                  <div className="h-px bg-gray-200 dark:bg-gray-700 my-1 mx-2" />
+                  
+                  <button onClick={() => handleMenuClick('logout')} className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer">
+                    <LogOut size={16} className="mr-3" /> Log out
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+            
         </div>
 
       </div>

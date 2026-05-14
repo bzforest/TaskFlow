@@ -57,7 +57,7 @@ export const useTaskStore = create<TaskStore>((set) => ({
 
     currentUser: {
         id: 'u1',
-        name: 'Best',
+        name: 'Best Sakditat',
         avatarUrl: 'https://i.pravatar.cc/150?img=1'
     },
 

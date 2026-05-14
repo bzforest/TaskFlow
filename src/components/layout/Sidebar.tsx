@@ -22,7 +22,7 @@ export default function Sidebar ({ isOpen , setIsOpen }: SidebarProps) {
 
     return (
         <aside className={clsx(
-                "relative flex flex-col bg-brand-navy text-gray-300 transition-all duration-300 z-20",
+                "relative flex flex-col bg-brand-navy text-gray-300 transition-all duration-300 z-60",
                 isOpen ? "w-64" : "w-20"
             )}
         >
@@ -102,7 +102,7 @@ export default function Sidebar ({ isOpen , setIsOpen }: SidebarProps) {
             {/* ปุ่มพับ/ขยาย Sidebar */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="absolute -right-3 top-10 bg-status-gray-bg text-status-gray-text p-1 rounded-full shadow-md hover:scale-110 transition-transform z-30 cursor-pointer"
+                className="absolute -right-3 top-10 bg-status-gray-bg text-status-gray-text p-1 rounded-full shadow-md hover:scale-110 transition-transform z-60 cursor-pointer"
             >
                 {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
             </button>

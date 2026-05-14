@@ -4,7 +4,7 @@ import MainLayout from './components/layout/MainLayout';
 import BubbleBackground from './components/backgrounds/BubbleBackground';
 import HexagonBackground from './components/backgrounds/HexagonBackground';
 import ComingSoon from './components/ui/ComingSoon';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AnalyticsPage from './pages/AnalyticsPage';
 import MyTasks from './pages/MyTasksPage';
 import Dashboard from './pages/DashboardPage';

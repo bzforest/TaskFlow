@@ -185,7 +185,7 @@ export default function TaskModal() {
 
                 {/* Priority & Status */}
                 <div className='flex flex-col sm:flex-row gap-4'>
-                    <div className='flex-1 relative z-10'>
+                    <div className='flex-1 relative z-11'>
                         <label className='block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1'>Priority</label>
                         <FormSelect value={priority} options={priorityOptions} onChange={(val) => setPriority(val)} />
                     </div>

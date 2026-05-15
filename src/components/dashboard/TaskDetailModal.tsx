@@ -231,7 +231,7 @@ export default function TaskDetailModal() {
                             </div>
                         </div>
                         {/* Edit Date */}
-                        <div className="relative z-10">
+                        <div className="relative">
                             <label className='block text-xs font-semibold text-gray-500 mb-1'>Due Date</label>
                             <CustomDatePicker 
                                 value={draftTask.date}
@@ -333,7 +333,7 @@ export default function TaskDetailModal() {
                                         const updated = (draftTask.checklist || []).filter(c => c.id !== item.id);
                                         setDraftTask({...draftTask, checklist: updated});
                                     }}
-                                    className="ml-auto opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all p-1"
+                                    className="ml-auto text-gray-400 hover:text-red-500 transition-all p-1 cursor-pointer"
                                 >
                                     <X size={14} />
                                 </button>
@@ -365,7 +365,7 @@ export default function TaskDetailModal() {
                 
                 <button 
                     onClick={() => setShowDeleteConfirm(true)}
-                    className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
                 >
                     <Trash2 size={16} /> <span className="hidden sm:inline">Delete Task</span>
                 </button>
@@ -373,15 +373,15 @@ export default function TaskDetailModal() {
                 <div className="flex gap-2">
                     {isEditing ? (
                         <>
-                            <button onClick={() => { setIsEditing(false); setDraftTask({...selectedTask}); }} className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                            <button onClick={() => { setIsEditing(false); setDraftTask({...selectedTask}); }} className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
                                 Cancel
                             </button>
-                            <button onClick={handleSave} className="px-4 py-2 text-sm font-semibold text-white bg-brand-blue rounded-lg hover:bg-brand-blue-hover shadow-lg shadow-brand-blue/20 transition-colors">
+                            <button onClick={handleSave} className="px-4 py-2 text-sm font-semibold text-white bg-brand-blue rounded-lg hover:bg-brand-blue-hover shadow-lg shadow-brand-blue/20 transition-colors cursor-pointer">
                                 Apply Changes
                             </button>
                         </>
                     ) : (
-                        <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors">
+                        <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors cursor-pointer">
                             <Edit2 size={16} /> Edit Details
                         </button>
                     )}

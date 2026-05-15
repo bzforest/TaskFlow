@@ -6,9 +6,10 @@ import clsx from 'clsx';
 interface DatePickerProps {
     value: string;
     onChange: (date: string) => void;
+    placement?: 'top' | 'bottom';
 }
 
-export default function CustomDatePicker({ value, onChange }: DatePickerProps) {
+export default function CustomDatePicker({ value, onChange, placement = 'bottom' }: DatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     
     // ใช้เก็บค่าเดือน/ปี ปัจจุบันที่กำลังกดดูอยู่ในปฏิทิน
@@ -87,11 +88,13 @@ export default function CustomDatePicker({ value, onChange }: DatePickerProps) {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: placement === 'top' ? 10 : -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
+                        exit={{ opacity: 0, y: placement === 'top' ? 10 : -10 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute left-0 bottom-full mb-2 w-[280px] bg-white dark:bg-brand-navy border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden p-3"
+                        className={`absolute left-0 w-[280px] bg-white dark:bg-brand-navy border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden p-3
+                            ${ placement === 'top' ? "bottom-full mb-2" : "top-full mt-2"
+                        }`}
                     >
                         {/* ส่วนหัว เปลี่ยนเดือน */}
                         <div className="flex items-center justify-between mb-4">

@@ -201,6 +201,7 @@ export default function TaskModal() {
                     <CustomDatePicker 
                         value={date}
                         onChange={setDate}
+                        placement="top"
                     />
                 </div>
 
